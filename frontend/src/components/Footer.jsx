@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 py-10 px-6">
+    <footer className="bg-gray-100 py-10 px-6 mt-10">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Left Side - Branding */}
         <div className="text-center md:text-left">

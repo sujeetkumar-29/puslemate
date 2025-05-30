@@ -24,10 +24,10 @@ const Doctors = () => {
   },[doctors,speciality]);
   return (
     <div>
-      {/* <p>Brouwse through the doctors specialist.</p> */}
+      <p>Browse through the doctors specialist.</p> <br /> 
       <div className='w-full'>
         <div className='flex flex-col lg:text-center sm:flex-row sm:flex-wrap gap-3 items-start sm:items-center text-center '>
-          <p onClick={()=>speciality === "General physician" ? navigate("/doctors"): navigate("/doctors/General physician")} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gary-300 rounded-full tansition-all cursor-pointer ${speciality === "General physician" ? "bg-indigo-100 text-black " : "" }`}>General physician</p>
+          <p onClick={()=>speciality === "General physician" ? navigate("/doctors"): navigate("/doctors/General physician")} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gary-300 rounded-full tansition-all cursor-pointer  ${speciality === "General physician" ? "bg-indigo-100 text-black " : "" }`}>General physician</p>
           <p onClick={()=>speciality === "Gynecologist" ? navigate("/doctors"): navigate("/doctors/Gynecologist")} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gary-300 rounded-full tansition-all cursor-pointer ${speciality === "Gynecologist" ? "bg-indigo-100 text-black " : "" }`}>Gynecologist</p>
           <p onClick={()=>speciality === "Dermatologist" ? navigate("/doctors"): navigate("/doctors/Dermatologist")} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gary-300 rounded-full tansition-all cursor-pointer ${speciality === "Dermatologist" ? "bg-indigo-100 text-black " : "" }`}>Dermatologist</p>
           <p onClick={()=>speciality === "Pediatricians" ? navigate("/doctors"): navigate("/doctors/Pediatricians")} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gary-300 rounded-full tansition-all cursor-pointer ${speciality === "Pediatricians" ? "bg-indigo-100 text-black " : "" }`}>Pediatricians</p>
