@@ -9,6 +9,10 @@ export default {
       colors: {
        "primary": '#494850',
     },
+    gridTemplateColumns: {
+      'auto': 'repeat(auto-fill, minmax(200px, 1fr))',  
+      // 'custom': 'repeat(3, minmax(0, 1fr))',
+    },
   },
 },
   plugins: [],

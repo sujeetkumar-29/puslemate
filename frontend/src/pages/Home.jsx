@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../components/header/Header';
 import SpecialityMenu from '../components/SpecialityMenu';
+import TopDoctors from '../components/TopDoctors';
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       </main>
       <div>
         <SpecialityMenu />
+        <TopDoctors />
       </div>
     </div>
     
