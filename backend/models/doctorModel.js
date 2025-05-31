@@ -17,6 +17,7 @@ const doctorSchema = new mongoose.Schema({
     image:{
         type: String,
         default: "https://res.cloudinary.com/dz3qj1x8h/image/upload/v1735681234/doctor.png",
+        required: true,
     },
     speciality:{
         type: String,
@@ -36,7 +37,7 @@ const doctorSchema = new mongoose.Schema({
     },
     available:{
         type: Boolean,
-        required: true,
+        default: true,
     },
     fees:{
         type: Number,
