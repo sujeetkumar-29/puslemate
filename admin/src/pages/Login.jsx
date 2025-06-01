@@ -1,11 +1,40 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { assets } from "../assets/assets";
+import { AdminContext } from '../context/AdminContext';
+import {toast} from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
     const [state, setState] = useState("Admin");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const {setAToken,backendUrl}=useContext(AdminContext);
+
+    const onSubmitHandler = async (event) => {
+        event.preventDefault();
+        try {
+            if (state === "Admin") {
+                    const {data}= await axios.post(backendUrl + "/api/admin/login", {
+                        email,
+                        password
+                    })
+                    if(data.success){
+                        localStorage.setItem("aToken", data.token);
+                        setAToken(data.token);
+                        console.log(data.token);  
+                    }else{
+                        toast.error(data.message);
+                    }
+            }else{
+
+            }
+        } catch (error) {
+            
+        }
+    }
 
     return (
-        <form className="min-h-[80vh] flex items-center justify-center bg-gray-100 px-4">
+        <form onSubmit={onSubmitHandler} className="min-h-[80vh] flex items-center justify-center bg-gray-100 px-4">
             <div className="flex flex-col gap-4 w-full max-w-md p-8 bg-white border border-gray-200 rounded-xl shadow-lg text-sm text-gray-700">
                 <p className="text-lg font-semibold">
                     <span className="text-cyan-600">{state}</span> Login
@@ -13,7 +42,7 @@ const Login = () => {
 
                 <div className="flex flex-col gap-1">
                     <label htmlFor="email" className="text-gray-600">Email</label>
-                    <input
+                    <input onChange={(e)=>setEmail(e.target.value)} value={email}
                         id="email"
                         type="email"
                         required
@@ -23,7 +52,7 @@ const Login = () => {
 
                 <div className="flex flex-col gap-1">
                     <label htmlFor="password" className="text-gray-600">Password</label>
-                    <input
+                    <input onChange={(e)=>setPassword(e.target.value)} value={password}
                         id="password"
                         type="password"
                         required

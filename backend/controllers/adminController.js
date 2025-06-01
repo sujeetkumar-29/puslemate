@@ -4,6 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import doctorModel from '../models/doctorModel.js';
 import jwt from 'jsonwebtoken';
 
+
 // Api for adding a doctor
 const addDoctor = async (req, res) => {
     try {
@@ -14,17 +15,17 @@ const addDoctor = async (req, res) => {
 
         // checking for add data to add doctor 
         if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address) {
-            return res.status(400).json({ success: false, message: "Please fill all the fields" });
+            return res.json({ success: false, message: "Please fill all the fields" });
         }
 
         // validating email format
         if (validator.isEmail(email) === false) {
-            return res.status(400).json({ success: false, message: "Please enter a valid email" });
+            return res.json({ success: false, message: "Please enter a valid email" });
         }
 
         // validating password length
         if (password.length < 8) {
-            return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
+            return res.json({ success: false, message: "Password must be at least 8 characters long" });
         }
         // hashing the password
         const salt = await bcrypt.genSalt(10);
@@ -59,12 +60,12 @@ const addDoctor = async (req, res) => {
         await newDoctor.save();
 
         // Return success response
-        res.status(201).json({ success: true, message: "Doctor added successfully"});
+        res.json({ success: true, message: "Doctor added successfully"});
 
     
     } catch (erorr) {
         console.error("Error adding doctor:", erorr);
-        res.status(500).json({ success: false, message: error.message || "Internal server error" });
+        res.json({ success: false, message: error.message || "Internal server error" });
 
     }
 }
@@ -73,18 +74,24 @@ const addDoctor = async (req, res) => {
 const loginAdmin = async (req, res) => {
     try{
         const { email, password } = req.body;
+        // console.log(email, password);
+    //       console.log("Incoming login request:");
+    // console.log("Email from request:", email);
+    // console.log("Password from request:", password);
+    // console.log("Expected email:", process.env.ADMIN_EMAIL);
+    // console.log("Expected password:", process.env.ADMIN_PASSWORD);
 
         // Check if email and password are provided
         if (email === process.env.ADMIN_EMAIL  && password === process.env.ADMIN_PASSWORD) {
            const token = jwt.sign( email+password,process.env.JWT_SECRET);
-           res.status(200).json({ success: true, message: "Login successful", token });
+           res.json({ success: true, message: "Login successful", token });
         }
         else{
-            res.status(400).json({ success: false, message: "Please provide valid email and password" });
+            res.json({ success: false, message: "Please provide valid email and password" });
         }
     }catch(error) {
         console.error("Error logging in admin:", error);
-        res.status(500).json({ success: false, message: error.message || "Internal server error" });
+        res.json({ success: false, message: error.message || "Internal server error" });
     }
 }
 
