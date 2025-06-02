@@ -30,13 +30,19 @@ const addDoctor = async (req, res) => {
         // hashing the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
+        let imageUrl;
         // uploading image to cloudinary
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-            // folder: "doctors",
+        try {
+          const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+         
             resource_type: "image"
         });
-        const imageUrl = imageUpload.secure_url;
+         imageUrl = imageUpload.secure_url;  
+        } catch (error) {
+                 console.error('Error uploading to Cloudinary:', error);
+    return  res.status(500).json({ message: 'Upload failed' });
+        }
+        
 
 
 
@@ -60,12 +66,12 @@ const addDoctor = async (req, res) => {
         await newDoctor.save();
 
         // Return success response
-        res.json({ success: true, message: "Doctor added successfully"});
+      return   res.json({ success: true, message: "Doctor added successfully"});
 
     
-    } catch (erorr) {
-        console.error("Error adding doctor:", erorr);
-        res.json({ success: false, message: error.message || "Internal server error" });
+    } catch (error) {
+        console.error("Error adding doctor:", error);
+      return  res.json({ success: false, message: error.message });
 
     }
 }

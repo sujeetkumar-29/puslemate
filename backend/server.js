@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 4000;
 // connect to database
 connectDB()
 // connect to cloudinary
-connectCloudinary();
+ await connectCloudinary();
 
 // middleware
 app.use(express.json());
