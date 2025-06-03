@@ -1,4 +1,4 @@
-import validataor from "validator"
+import validator from "validator"
 import bcrypt from "bcrypt"
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken"
@@ -11,15 +11,15 @@ const registerUser = async (req, res) => {
         const { name, email, password } = req.body;
 
         if (!name || !password || !email) {
-            return res.json({ succes: false, message: "Missing Details" })
+            return res.json({success: false, message: "Missing Details" })
         }
         // validating email format
-        if (!validataor.isEmail(email)){
-            res.json({succes:false,message:"enter a valid email"})
-        }
+        if (!validator.isEmail(email)){    
+           return  res.json({success:false,message:"enter a valid email"})
+        }   
         // validating strong password
-        if(password.length <8){
-             res.json({succes:false,message:"enter a strong password"})
+        if(password.length < 8){
+            return res.json({success:false,message:"enter a strong password"})
         }
 
         // hashing user password
@@ -29,14 +29,15 @@ const registerUser = async (req, res) => {
         const userData={
             name,
             email,
-            password: hashedPassword
+            password : hashedPassword
         }
         const newUser= new userModel(userData)
         const user=await newUser.save()
 
         const token=jwt.sign({id:user._id},process.env.JWT_SECRET)
 
-        res.json({succes:true,token})
+        res.json({success:true,token})
+        console.log(token)
 
     } catch (error) {
          console.log(error)
@@ -51,20 +52,22 @@ const loginUser= async(req,res)=>{
         const user = await userModel.findOne({email})
 
         if(!user){
-          return   res.json({succes:false,message:"User does not exits."})
+          return   res.json({success:false,message:"User does not exits."})
         }
+        
 
         const isMatch= await bcrypt.compare(password,user.password)
 
         if(isMatch){
             const token= jwt.sign({id:user._id},process.env.JWT_SECRET)
-            res.json({succes:true,token})
+            res.json({success:true,token}) 
+            //   toast.success("Logged in successfully!");
         }else{
-            res.json({succes:false,message:"Invalid Credentials"})
+            res.json({success:false,message:"Invalid Credentials"})
         }
     } catch (error) {
          console.log(error)
-            res.json({success:false,message:error.message})
+         return   res.json({success:false,message:error.message})
     }
 }
 
