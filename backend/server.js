@@ -5,6 +5,7 @@ import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloundinary.js';
 import adminRouter from './routes/adminRoute.js';
 import DoctorRouter from './routes/doctorRoute.js';
+import userRouter from './routes/userRoute.js';
 
 
 // app configuration
@@ -24,6 +25,8 @@ app.use(cors())
 app.use("/api/admin", adminRouter);
 
 app.use("/api/doctor",DoctorRouter)
+
+app.use("/api/user",userRouter)
 
 app.get("/",(req,res)=>{
     res.send("Api working successfully");
