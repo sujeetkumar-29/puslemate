@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   // const [token, setToken] = useState(true);
-  const {token, setToken} = useContext(AppContext);
+  const {token, setToken,userData} = useContext(AppContext);
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -43,14 +43,14 @@ const Navbar = () => {
 
       {/* Profile / Login / Mobile Menu Toggle */}
       <div className="flex items-center gap-3">
-        {token ? (
+        {token && userData? (
           <div
             className="relative group cursor-pointer"
             onClick={() => setShowDropdown((prev) => !prev)}
           >
             <div className="flex items-center gap-2">
               <img
-                src={assets.profile_pic}
+                src={userData.image}
                 alt="profile"
                 className="w-10 h-10 rounded-full"
               />
