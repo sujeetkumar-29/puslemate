@@ -15,7 +15,7 @@ const AppContextProvider = (props) => {
     const [userData, setUserData] = useState(false)
 
 
-    const getDoctorData = async () => {
+    const getDoctorsData = async () => {
         try {
             const { data } = await axios.get(backendUrl + "/api/doctor/list")
             if (data.success) {
@@ -45,7 +45,7 @@ const AppContextProvider = (props) => {
     }
 
     const value = {
-        doctors,
+        doctors,getDoctorsData,
         currencySymbol,
         token, setToken,
         backendUrl,
@@ -53,7 +53,7 @@ const AppContextProvider = (props) => {
         loadUserProfileData
     }
     useEffect(() => {
-        getDoctorData()
+        getDoctorsData()
     }, [])
 
     useEffect(() => {

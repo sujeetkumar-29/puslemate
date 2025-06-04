@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import { assets } from '../assets/assets'
 import RelatedDoctors from '../components/RelatedDoctors'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const Appointment = () => {
   const { docId } = useParams()
-  const { doctors, currencySymbol } = useContext(AppContext)
+  const { doctors, currencySymbol, backendUrl, token, getDoctorsData } = useContext(AppContext)
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
+  const navigate = useNavigate()
   const [docInfo, setDocInfo] = useState(null)
   const [docSlots, setDocSlots] = useState([])
   const [slotIndex, setSlotIndex] = useState(0)
@@ -36,10 +39,28 @@ const Appointment = () => {
       const timeSlots = []
       while (startTime < endTime) {
         const formattedTime = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        timeSlots.push({
+
+   const date = new Date(startTime)
+
+
+     let day = date.getDate().toString().padStart(2, '0')
+    let month = (date.getMonth() + 1).toString().padStart(2, '0')
+    let year = date.getFullYear()
+
+    const slotDate = `${day}_${month}_${year}`
+    const slotTime=formattedTime
+
+    const isSlotAvailable=docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false :true
+
+    if (isSlotAvailable) {
+       timeSlots.push({
           dateTime: new Date(startTime),
           time: formattedTime,
         })
+    }
+
+
+       
         startTime.setMinutes(startTime.getMinutes() + 30)
       }
 
@@ -47,13 +68,61 @@ const Appointment = () => {
     }
   }
 
+  const bookAppointment = async () => {
+  if (!token) {
+    toast.warn("Log in to book appointments")
+    return navigate("/login")
+  }
+
+  try {
+    if (!docSlots[slotIndex] || docSlots[slotIndex].length === 0) {
+      toast.error("No slots available for the selected date")
+      return
+    }
+
+    if (!slotTime) {
+      toast.warn("Please select a time slot")
+      return
+    }
+
+    const date = docSlots[slotIndex][0].dateTime
+
+    let day = date.getDate().toString().padStart(2, '0')
+    let month = (date.getMonth() + 1).toString().padStart(2, '0')
+    let year = date.getFullYear()
+
+    const slotDate = `${day}_${month}_${year}`
+
+    const { data } = await axios.post(
+      backendUrl + "/api/user/book-appointment",
+      { docId, slotDate, slotTime },
+      { headers: { token } }
+    )
+
+    if (data.success) {
+      toast.success(data.message)
+      getDoctorsData()
+      navigate("/my-appointments")
+    } else {
+      toast.error(data.message)
+    }
+  } catch (error) {
+    console.error(error)
+    toast.error(error.response?.data?.message || "Booking failed")
+  }
+}
+
+
   useEffect(() => {
     fetchDocInfo()
   }, [doctors, docId])
 
-  useEffect(() => {
+ useEffect(() => {
+  if (docInfo) {
     getAvailableSlots()
-  }, [docInfo])
+  }
+}, [docInfo])
+
 
   return (
     docInfo && (
@@ -105,11 +174,10 @@ const Appointment = () => {
                 <div
                   onClick={() => setSlotIndex(index)}
                   key={index}
-                  className={`text-center px-4 py-3 rounded-2xl cursor-pointer shadow-md min-w-20 transition-all duration-200 ${
-                    slotIndex === index
+                  className={`text-center px-4 py-3 rounded-2xl cursor-pointer shadow-md min-w-20 transition-all duration-200 ${slotIndex === index
                       ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
                       : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   <p className="font-medium">{item[0] && daysOfWeek[item[0].dateTime.getDay()]}</p>
                   <p className="text-sm">{item[0] && item[0].dateTime.getDate()}</p>
@@ -124,11 +192,10 @@ const Appointment = () => {
                 <p
                   key={index}
                   onClick={() => setSlotTime(item.time)}
-                  className={`text-sm font-medium px-5 py-2 rounded-full cursor-pointer border transition-all duration-200 ${
-                    item.time === slotTime
+                  className={`text-sm font-medium px-5 py-2 rounded-full cursor-pointer border transition-all duration-200 ${item.time === slotTime
                       ? 'bg-cyan-600 text-white shadow-md'
                       : 'text-gray-500 bg-gray-50 hover:bg-gray-100 border-gray-300'
-                  }`}
+                    }`}
                 >
                   {item.time.toLowerCase()}
                 </p>
@@ -137,13 +204,13 @@ const Appointment = () => {
 
           {/* Book Button */}
           <div className="mt-8 text-center">
-            <button className="bg-black text-white px-10 py-3 rounded-full text-sm font-medium shadow-lg hover:bg-gray-800 transition-all">
+            <button onClick={bookAppointment} className="bg-black text-white px-10 py-3 rounded-full text-sm font-medium shadow-lg hover:bg-gray-800 transition-all">
               Book an Appointment
             </button>
           </div>
         </div>
         {/* Listing Related Doctors  */}
-        <RelatedDoctors docId={docId}  speciality={docInfo.speciality}/> 
+        <RelatedDoctors docId={docId} speciality={docInfo.speciality} />
       </div>
     )
   )
