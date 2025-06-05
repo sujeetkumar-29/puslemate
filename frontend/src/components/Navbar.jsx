@@ -9,8 +9,6 @@ const Navbar = () => {
   // const [token, setToken] = useState(true);
   const {token, setToken,userData} = useContext(AppContext);
 
-  const [showDropdown, setShowDropdown] = useState(false);
-
   const logout=()=>{
     setToken(false)
     localStorage.removeItem("token")
@@ -44,10 +42,7 @@ const Navbar = () => {
       {/* Profile / Login / Mobile Menu Toggle */}
       <div className="flex items-center gap-3">
         {token && userData? (
-          <div
-            className="relative group cursor-pointer"
-            onClick={() => setShowDropdown((prev) => !prev)}
-          >
+          <div className="relative group cursor-pointer">
             <div className="flex items-center gap-2">
               <img
                 src={userData.image}
@@ -58,37 +53,26 @@ const Navbar = () => {
             </div>
 
             {/* Dropdown */}
-            {showDropdown && (
-              <div className="absolute right-0 mt-3 bg-white border border-gray-300 shadow-md rounded-lg w-48 p-4 z-50">
-                <p
-                  onClick={() => {
-                    navigate('/my-profile');
-                    setShowDropdown(false);
-                  }}
-                  className="cursor-pointer hover:text-black text-gray-600 py-1"
-                >
-                  My Profile
-                </p>
-                <p
-                  onClick={() => {
-                    navigate('/my-appointments');
-                    setShowDropdown(false);
-                  }}
-                  className="cursor-pointer hover:text-black text-gray-600 py-1"
-                >
-                  My Appointments
-                </p>
-                <p
-                  onClick={() => {
-                   logout();
-                    setShowDropdown(false);
-                  }}
-                  className="cursor-pointer hover:text-red-600 text-gray-600 py-1"
-                >
-                  Logout
-                </p>
-              </div>
-            )}
+            <div className="absolute right-0 mt-3 bg-white border border-gray-300 shadow-md rounded-lg w-48 p-4 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <p
+                onClick={() => navigate('/my-profile')}
+                className="cursor-pointer hover:text-black text-gray-600 py-1"
+              >
+                My Profile
+              </p>
+              <p
+                onClick={() => navigate('/my-appointments')}
+                className="cursor-pointer hover:text-black text-gray-600 py-1"
+              >
+                My Appointments
+              </p>
+              <p
+                onClick={() => logout()}
+                className="cursor-pointer hover:text-red-600 text-gray-600 py-1"
+              >
+                Logout
+              </p>
+            </div>
           </div>
         ) : (
           <button
