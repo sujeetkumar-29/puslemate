@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const MyAppointments = () => {
   // const { doctors } = useContext(AppContext);
-  const { backendUrl, token } = useContext(AppContext);
+  const { backendUrl, token, getDoctorsData } = useContext(AppContext);
 
   const [appointments, setAppointments] = useState([])
   const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -33,23 +33,24 @@ const MyAppointments = () => {
     }
   }
 
-    const cancelAppointment=async(appointmentId)=>{
-      try {
-        // console.log(appointmentId)
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      // console.log(appointmentId)
 
-        const {data}= await axios.post(backendUrl + "/api/user/cancel-appointment",{appointmentId},{headers:{token}})
-        if(data.success){
-          toast.success(data.message)
-          getUserAppointments()
-        }else{
-          toast.error(data.message)
-        }
-
-      } catch (error) {
-        console.log(error)
-      toast.error(error.message)
+      const { data } = await axios.post(backendUrl + "/api/user/cancel-appointment", { appointmentId }, { headers: { token } })
+      if (data.success) {
+        toast.success(data.message)
+        getUserAppointments()
+        getDoctorsData()
+      } else {
+        toast.error(data.message)
       }
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
     }
+  }
 
   useEffect(() => {
     if (token) {
@@ -82,13 +83,22 @@ const MyAppointments = () => {
 
             {/* Actions */}
             <div className="flex flex-col gap-2 mt-4 sm:mt-0 sm:ml-auto">
-              <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-green-600 hover:text-white transition">
-                Pay Online
-              </button>
+              {
+                !item.cancelled &&
+                <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-green-600 hover:text-white transition">
+                  Pay Online
+                </button>
+              }
+              {
+                !item.cancelled &&
 
-              <button onClick={()=>cancelAppointment(item._id)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-red-500 hover:text-white transition">
-                Cancel Appointment
-              </button>
+                <button onClick={() => cancelAppointment(item._id)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-red-500 hover:text-white transition">
+                  Cancel Appointment
+                </button>
+              }
+               {
+              item.cancelled && <button className='sm:min-w-48 py-2 border border-red-400 rounded text-red-400'>Appointment Cancelled</button>
+               }
             </div>
           </div>
         ))}
