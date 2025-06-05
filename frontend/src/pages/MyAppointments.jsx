@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 import { useState } from 'react';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 
@@ -10,11 +10,11 @@ const MyAppointments = () => {
   const { backendUrl, token } = useContext(AppContext);
 
   const [appointments, setAppointments] = useState([])
-  const months=["","Jan", "Feb", "Mar","Apr", "May" ,"Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+  const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-  const slotDateFormat=(slotDate)=>{
-    const dateArray= slotDate.split("_")
-    return dateArray[0]+ " " + months[Number(dateArray[1])] + " " + dateArray[2]
+  const slotDateFormat = (slotDate) => {
+    const dateArray = slotDate.split("_")
+    return dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2]
 
   }
 
@@ -25,7 +25,6 @@ const MyAppointments = () => {
       if (data.success) {
         setAppointments(data.appointments.reverse())
         // console.log(data.appointments)
-
       }
     } catch (error) {
       console.log(error)
@@ -33,9 +32,28 @@ const MyAppointments = () => {
 
     }
   }
+
+    const cancelAppointment=async(appointmentId)=>{
+      try {
+        // console.log(appointmentId)
+
+        const {data}= await axios.post(backendUrl + "/api/user/cancel-appointment",{appointmentId},{headers:{token}})
+        if(data.success){
+          toast.success(data.message)
+          getUserAppointments()
+        }else{
+          toast.error(data.message)
+        }
+
+      } catch (error) {
+        console.log(error)
+      toast.error(error.message)
+      }
+    }
+
   useEffect(() => {
     if (token) {
-      
+
       getUserAppointments()
     }
   }, [token]
@@ -68,7 +86,7 @@ const MyAppointments = () => {
                 Pay Online
               </button>
 
-              <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-red-500 hover:text-white transition">
+              <button onClick={()=>cancelAppointment(item._id)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-red-500 hover:text-white transition">
                 Cancel Appointment
               </button>
             </div>
