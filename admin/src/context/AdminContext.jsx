@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import React, { useState } from 'react';
+import { createContext } from "react"
+import React, { useState } from 'react'
 import axios from "axios"
 import {toast} from "react-toastify"
 
@@ -7,8 +7,10 @@ import {toast} from "react-toastify"
 export  const AdminContext = createContext()
 
 export const AdminContextProvider = ( props ) => {
-    const [aToken, setAToken] = useState(localStorage.getItem("aToken")? localStorage.getItem("aToken") : "");
-    const [doctors,setDoctors]=useState([]);
+    const [aToken, setAToken] = useState(localStorage.getItem("aToken")? localStorage.getItem("aToken") : "")
+    const [doctors,setDoctors]=useState([])
+    const [appointments,setAppointments]=useState([])
+
     const backendUrl=import.meta.env.VITE_BACKEND_URL
 
     const getAllDoctors=async()=>{
@@ -42,12 +44,27 @@ export const AdminContextProvider = ( props ) => {
         }
     }
 
+    const getAllAppointments = async ()=>{
+        try {
+            const {data}= await axios.get(backendUrl + "/api/admin/appointments",{headers:{aToken}})
+            if(data.success){
+                setAppointments(data.appointments)
+                // console.log(data.appointments)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+             toast.error(error.message) 
+        }
+    }
+
     const value = {
         // Define any state or functions you want to provide to the context
         aToken,
         setAToken, 
         backendUrl,
-        doctors,getAllDoctors,changeAvailability
+        doctors,getAllDoctors,changeAvailability,
+        appointments, setAppointments,getAllAppointments 
     };
     return(
         <AdminContext.Provider value={value}>
