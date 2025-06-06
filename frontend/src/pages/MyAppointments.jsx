@@ -17,7 +17,6 @@ const MyAppointments = () => {
   const slotDateFormat = (slotDate) => {
     const dateArray = slotDate.split("_")
     return dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2]
-
   }
 
   const getUserAppointments = async (req, res) => {
@@ -127,7 +126,7 @@ const MyAppointments = () => {
             <div className="flex flex-col gap-2 mt-4 sm:mt-0 sm:ml-auto">
               {!item.cancelled && item.payment && <button className='sm:min-w-48 py-2 border rounded text-stone-500 bg-green-100 '>Paid</button>}
               {
-                !item.cancelled && !item.payment && 
+                !item.cancelled && !item.payment &&
                 <button onClick={() => appointmentRazorpay(item._id)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-green-600 hover:text-white transition">
                   Pay Online
                 </button>
