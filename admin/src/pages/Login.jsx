@@ -1,35 +1,44 @@
 import React, { useContext, useState } from 'react';
 import { assets } from "../assets/assets";
 import { AdminContext } from '../context/AdminContext';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from 'axios';
+import { DoctorContext } from '../context/DoctorContext';
 
 const Login = () => {
     const [state, setState] = useState("Admin");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const {setAToken,backendUrl}=useContext(AdminContext);
+    const { setAToken, backendUrl } = useContext(AdminContext);
+    const { setDToken } = useContext(DoctorContext)
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
         try {
             if (state === "Admin") {
-                    const {data}= await axios.post(backendUrl + "/api/admin/login", {
-                        email,
-                        password
-                    })
-                    if(data.success){
-                        localStorage.setItem("aToken", data.token);
-                        setAToken(data.token);
-                        console.log(data.token);  
-                    }else{
-                        toast.error(data.message);
-                    }
-            }else{
-
+                const { data } = await axios.post(backendUrl + "/api/admin/login", {
+                    email,
+                    password
+                })
+                if (data.success) {
+                    localStorage.setItem("aToken", data.token);
+                    setAToken(data.token);
+                    console.log(data.token);
+                } else {
+                    toast.error(data.message);
+                }
+            } else {
+                const {data}= await axios.post(backendUrl + "/api/doctor/login",{email,password})
+                 if (data.success) {
+                    localStorage.setItem("dToken", data.token);
+                    setDToken(data.token);
+                    console.log(data.token);
+                } else {
+                    toast.error(data.message);
+                }
             }
         } catch (error) {
-            
+
         }
     }
 
@@ -42,7 +51,7 @@ const Login = () => {
 
                 <div className="flex flex-col gap-1">
                     <label htmlFor="email" className="text-gray-600">Email</label>
-                    <input onChange={(e)=>setEmail(e.target.value)} value={email}
+                    <input onChange={(e) => setEmail(e.target.value)} value={email}
                         id="email"
                         type="email"
                         required
@@ -52,7 +61,7 @@ const Login = () => {
 
                 <div className="flex flex-col gap-1">
                     <label htmlFor="password" className="text-gray-600">Password</label>
-                    <input onChange={(e)=>setPassword(e.target.value)} value={password}
+                    <input onChange={(e) => setPassword(e.target.value)} value={password}
                         id="password"
                         type="password"
                         required
@@ -61,15 +70,15 @@ const Login = () => {
                 </div>
 
                 <button
-                    
+
                     className="mt-4 w-full py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700 transition-all duration-200"
                 >
                     Login
                 </button>
                 {
-                    state === "Admin" ? 
-                    <p>Doctor Login? <span className='text-primary cursor-pointer' onClick={()=>setState("Doctor")}>Click here </span></p>
-                    :<p>Admin Login? <span className='text-primary cursor-pointer' onClick={()=>setState("Admin")}>Click here </span></p>
+                    state === "Admin" ?
+                        <p>Doctor Login? <span className='text-primary cursor-pointer' onClick={() => setState("Doctor")}>Click here </span></p>
+                        : <p>Admin Login? <span className='text-primary cursor-pointer' onClick={() => setState("Admin")}>Click here </span></p>
                 }
             </div>
         </form>
