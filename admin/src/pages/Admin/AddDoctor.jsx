@@ -71,8 +71,8 @@ const AddDoctor = () => {
       
     }
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h2 className="text-3xl font-bold  text-cyan-600 mb-4">Add Doctor</h2>
+    <div className="w-full max-w-4xl  p-4 px-10">
+      <h2 className="text-xl font-semibold text-black-600 mb-4">Add Doctor</h2>
 
       {/* Scrollable Form */}
       <div className="bg-white shadow-2xl rounded-xl p-6 max-h-[80vh] overflow-y-auto space-y-6">

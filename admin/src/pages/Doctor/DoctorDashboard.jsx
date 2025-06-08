@@ -16,7 +16,7 @@ const DoctorDashboard = () => {
   }, [dToken])
 
   return dashData && (
-    <div className='m-5'>
+    <div className='w-full max-w-4xl p-4'>
       <div className='flex flex-wrap gap-3'>
         <div className='flex items-center gap-2 bg-white p-2 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
           <img className='w-14' src={assets.earning_icon} alt="" />

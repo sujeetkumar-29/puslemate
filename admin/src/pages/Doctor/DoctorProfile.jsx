@@ -42,7 +42,7 @@ const DoctorProfile = () => {
     }
   }, [dToken])
   return profileData && (
-    <div className='flex flex-col gap-4 m-5'>
+    <div className='flex flex-col gap-4 m-5 w-full max-w-4xl p-4'>
 
       <div>
         <div>
