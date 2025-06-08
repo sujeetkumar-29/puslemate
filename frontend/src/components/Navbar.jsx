@@ -47,7 +47,7 @@ const Navbar = () => {
               <img
                 src={userData.image}
                 alt="profile"
-                className="w-10 h-10 rounded-full"
+                className="w-10 h-10 rounded-full bg-gray-400"
               />
               <img src={assets.dropdown_icon} alt="dropdown" className="w-3" />
             </div>
