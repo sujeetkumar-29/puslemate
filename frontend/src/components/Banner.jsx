@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Banner() {
     const navigate= useNavigate();
   return (
-    <section className="bg-cyan-50 px-10">
+    <section className="bg-slate-300 px-10">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 ">
         {/* Left Content */}
         <div className="flex-1 text-center lg:text-left">

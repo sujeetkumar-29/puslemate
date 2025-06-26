@@ -305,3 +305,26 @@ export const doctors = [
         }
     },
 ]
+
+export const faqs = [
+  {
+    question: "What is PulseMate?",
+    answer: "PulseMate is an online platform that allows users to search for doctors, book appointments, and manage medical consultations efficiently.",
+  },
+  {
+    question: "How do I book an appointment?",
+    answer: "To book an appointment, register or log in, choose a doctor from the list, and select your preferred date and time.",
+  },
+  {
+    question: "Can I cancel or reschedule an appointment?",
+    answer: "Yes, you can cancel or reschedule an appointment from your dashboard before the scheduled time.",
+  },
+  {
+    question: "Who can add doctors to the platform?",
+    answer: "Only admin users have the rights to add, update, or delete doctor profiles.",
+  },
+  {
+    question: "Is my data secure?",
+    answer: "Yes, we use secure authentication and encryption to protect your data and privacy.",
+  },
+];

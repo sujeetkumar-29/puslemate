@@ -14,7 +14,7 @@ const TopDoctors = () => {
       </p>
 
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-        {doctors.slice(0, 10).map((item, index) => (
+        {doctors.slice(0, 8).map((item, index) => (
           <div
             key={index}
             onClick={() => {
