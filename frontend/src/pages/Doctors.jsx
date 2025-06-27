@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
+import SearchDoctor from '../components/SearchDoctor';
 
 const Doctors = () => {
   const { speciality } = useParams();
@@ -33,6 +34,7 @@ const Doctors = () => {
 
   return (
     <div className="px-4 py-8">
+      {/* <SearchDoctor /> */}
       <h2 className="text-2xl font-semibold mb-4 text-center">Browse Doctors by Speciality</h2>
 
       {/* Toggle Button for Small Screens */}

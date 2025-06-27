@@ -15,7 +15,7 @@ export default function Banner() {
           <p className="text-gray-600 mb-6">
             Find experienced specialists near you and schedule appointments with ease.
           </p>
-          <button onClick={()=>{navigate('/login'); scrollTo(0,0)}} className="bg-slate-900 text-white px-6 py-3 rounded-md hover:text-sm transition-all duration-500">
+          <button onClick={()=>{navigate('/login'); scrollTo(0,0)}} className="bg-slate-900 text-white px-6 py-3 rounded-md hover:scale-105 transition-transform   duration-500">
             Get Started
           </button>
         </div>
@@ -25,7 +25,7 @@ export default function Banner() {
           <img
             src={assets.appointment_img}
             alt="Doctor illustration"
-            className="w-full max-w-md mx-auto lg:mx-0"
+            className="w-full max-w-md mx-auto lg:mx-0 hidden lg:block "
           />
         </div>
       </div>
