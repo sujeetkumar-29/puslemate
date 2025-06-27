@@ -26,7 +26,7 @@ const Appointment = () => {
     setDocSlots([])
     const today = new Date()
 
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 90; i++) {
       const currentDate = new Date(today)
       currentDate.setDate(today.getDate() + i) // Start from tomorrow
 
@@ -40,27 +40,24 @@ const Appointment = () => {
       while (startTime < endTime) {
         const formattedTime = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
-   const date = new Date(startTime)
+        const date = new Date(startTime)
 
 
-     let day = date.getDate().toString().padStart(2, '0')
-    let month = (date.getMonth() + 1).toString().padStart(2, '0')
-    let year = date.getFullYear()
+        let day = date.getDate().toString().padStart(2, '0')
+        let month = (date.getMonth() + 1).toString().padStart(2, '0')
+        let year = date.getFullYear()
 
-    const slotDate = `${day}_${month}_${year}`
-    const slotTime=formattedTime
+        const slotDate = `${day}_${month}_${year}`
+        const slotTime = formattedTime
 
-    const isSlotAvailable=docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false :true
+        const isSlotAvailable = docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true
 
-    if (isSlotAvailable) {
-       timeSlots.push({
-          dateTime: new Date(startTime),
-          time: formattedTime,
-        })
-    }
-
-
-       
+        if (isSlotAvailable) {
+          timeSlots.push({
+            dateTime: new Date(startTime),
+            time: formattedTime,
+          })
+        }
         startTime.setMinutes(startTime.getMinutes() + 30)
       }
 
@@ -69,59 +66,59 @@ const Appointment = () => {
   }
 
   const bookAppointment = async () => {
-  if (!token) {
-    toast.warn("Log in to book appointments")
-    return navigate("/login")
+    if (!token) {
+      toast.warn("Log in to book appointments")
+      return navigate("/login")
+    }
+
+    try {
+      if (!docSlots[slotIndex] || docSlots[slotIndex].length === 0) {
+        toast.error("No slots available for the selected date")
+        return
+      }
+
+      if (!slotTime) {
+        toast.warn("Please select a time slot")
+        return
+      }
+
+      const date = docSlots[slotIndex][0].dateTime
+
+      let day = date.getDate().toString().padStart(2, '0')
+      let month = (date.getMonth() + 1).toString().padStart(2, '0')
+      let year = date.getFullYear()
+
+      const slotDate = `${day}_${month}_${year}`
+
+      const { data } = await axios.post(
+        backendUrl + "/api/user/book-appointment",
+        { docId, slotDate, slotTime },
+        { headers: { token } }
+      )
+
+      if (data.success) {
+        toast.success(data.message)
+        getDoctorsData()
+        navigate("/my-appointments")
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error(error.response?.data?.message || "Booking failed")
+    }
   }
-
-  try {
-    if (!docSlots[slotIndex] || docSlots[slotIndex].length === 0) {
-      toast.error("No slots available for the selected date")
-      return
-    }
-
-    if (!slotTime) {
-      toast.warn("Please select a time slot")
-      return
-    }
-
-    const date = docSlots[slotIndex][0].dateTime
-
-    let day = date.getDate().toString().padStart(2, '0')
-    let month = (date.getMonth() + 1).toString().padStart(2, '0')
-    let year = date.getFullYear()
-
-    const slotDate = `${day}_${month}_${year}`
-
-    const { data } = await axios.post(
-      backendUrl + "/api/user/book-appointment",
-      { docId, slotDate, slotTime },
-      { headers: { token } }
-    )
-
-    if (data.success) {
-      toast.success(data.message)
-      getDoctorsData()
-      navigate("/my-appointments")
-    } else {
-      toast.error(data.message)
-    }
-  } catch (error) {
-    console.error(error)
-    toast.error(error.response?.data?.message || "Booking failed")
-  }
-}
 
 
   useEffect(() => {
     fetchDocInfo()
   }, [doctors, docId])
 
- useEffect(() => {
-  if (docInfo) {
-    getAvailableSlots()
-  }
-}, [docInfo])
+  useEffect(() => {
+    if (docInfo) {
+      getAvailableSlots()
+    }
+  }, [docInfo])
 
 
   return (
@@ -160,6 +157,12 @@ const Appointment = () => {
                 {docInfo.fees}
               </span>
             </p>
+            <p>Address : {docInfo.address.line1} {docInfo.address.line2}</p>
+            {/* <p> </p> */}
+           
+         
+
+
           </div>
         </div>
 
@@ -175,12 +178,17 @@ const Appointment = () => {
                   onClick={() => setSlotIndex(index)}
                   key={index}
                   className={`text-center px-4 py-3 rounded-2xl cursor-pointer shadow-md min-w-20 transition-all duration-200 ${slotIndex === index
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
-                      : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100'
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
+                    : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100'
                     }`}
                 >
                   <p className="font-medium">{item[0] && daysOfWeek[item[0].dateTime.getDay()]}</p>
-                  <p className="text-sm">{item[0] && item[0].dateTime.getDate()}</p>
+                  {/* <p className="text-sm">{item[0] && item[0].dateTime.getDate()}</p> */}
+                  <p className="text-sm pt-1">
+                    {item[0] &&
+                      `${item[0].dateTime.getDate()} ${item[0].dateTime.toLocaleString('default', { month: 'short' })}`}
+                  </p>
+
                 </div>
               ))}
           </div>
@@ -193,8 +201,8 @@ const Appointment = () => {
                   key={index}
                   onClick={() => setSlotTime(item.time)}
                   className={`text-sm font-medium px-5 py-2 rounded-full cursor-pointer border transition-all duration-200 ${item.time === slotTime
-                      ? 'bg-cyan-600 text-white shadow-md'
-                      : 'text-gray-500 bg-gray-50 hover:bg-gray-100 border-gray-300'
+                    ? 'bg-cyan-600 text-white shadow-md'
+                    : 'text-gray-500 bg-gray-50 hover:bg-gray-100 border-gray-300'
                     }`}
                 >
                   {item.time.toLowerCase()}
