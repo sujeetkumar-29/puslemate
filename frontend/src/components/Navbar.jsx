@@ -15,7 +15,7 @@ const Navbar = () => {
      navigate('/login');   
   }
   return (
-    <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-300 px-4 md:px-8 relative z-30">
+    <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-300 px-4 md:px-8 relative z-30 sticky top-0 bg-white shadow-md">
       {/* Logo */}
       <img
         onClick={() => navigate('/')}

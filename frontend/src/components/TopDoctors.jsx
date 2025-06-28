@@ -24,7 +24,7 @@ const TopDoctors = () => {
             className="border border-yellow-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all duration-300 bg-white"
           >
             <img
-              className="w-full h-60 object-cover bg-gray-400"
+              className="w-full h-70 object-cover bg-gray-400"
               src={item.image}
               alt="doctor"
             />
