@@ -23,7 +23,7 @@ const Login = () => {
                 if (data.success) {
                     localStorage.setItem("aToken", data.token);
                     setAToken(data.token);
-                    console.log(data.token);
+                    // console.log(data.token);
                 } else {
                     toast.error(data.message);
                 }
@@ -32,13 +32,14 @@ const Login = () => {
                  if (data.success) {
                     localStorage.setItem("dToken", data.token);
                     setDToken(data.token);
-                    console.log(data.token);
+                    // console.log(data.token);
                 } else {
                     toast.error(data.message);
                 }
             }
         } catch (error) {
-
+            toast.error(error.message);
+            // console.log(error);
         }
     }
 

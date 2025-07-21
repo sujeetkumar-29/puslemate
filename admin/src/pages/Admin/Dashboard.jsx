@@ -52,9 +52,9 @@ const Dashboard = () => {
   const { doctors, appointments, patients, latestAppointments } = dashData;
 
   return (
-    <div className="w-full max-w-4xl p-4 px-10">
+    <div className='w-full max-w-4xl p-4 px-6'>
       {/* Stat cards */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-2">
         <StatCard icon={assets.doctor_icon} count={doctors} label="Doctors" />
         <StatCard icon={assets.appointments_icon} count={appointments} label="Appointments" />
         <StatCard icon={assets.patients_icon} count={patients} label="Patients" />
