@@ -2,6 +2,8 @@
 
 A comprehensive healthcare appointment booking platform that connects patients with doctors through an intuitive web interface. The system includes separate portals for patients, doctors, and administrators.
 
+[Watch Demo Video](https://www.youtube.com/watch?v=_YPCDMgV8dg)
+
 ## 🏗️ Project Structure
 
 ```
