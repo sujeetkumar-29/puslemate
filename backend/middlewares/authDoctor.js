@@ -13,7 +13,7 @@ const authDoctor = (req, res, next) => {
 
         next(); // Proceed to the next middleware or route handler
     }catch(error) {
-        console.error("Error in authAdmin middleware:", error);
+        console.error("Error in authDoctor middleware:", error);
         return res.json({ success: false, message: "Internal server error" });
     }
 
