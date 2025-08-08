@@ -49,14 +49,24 @@ const doctorSchema = new mongoose.Schema({
     },
     date:{
         type: Number,
-        // default: Date.now,
         required: true,
     },
     slots_booked:{
         type: Object,
         default: {},
     },
-    
+    // New rating fields
+    averageRating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5,
+    },
+    totalReviews: {
+        type: Number,
+        default: 0,
+        min: 0,
+    },
 
 },{minimize: false});
 
